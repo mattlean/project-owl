@@ -9,3 +9,5 @@ handlers:
   script: guestbook.application
 
 libraries:
+- name: webapp2
+  version: latest
