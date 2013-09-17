@@ -40,6 +40,33 @@
 				<input type="text" name="amount" value="{{amount}}">
 			</label>
 			
+			<hr>
+			
+			<div class="transaction">
+				<table>
+					<thead>
+						<tr>
+							<th><label>Date</label></th>
+							<th><label>Description</label></th>
+							<th><label>Business</label></th>
+							<th><label>Category</label></th>
+							<th><label>Transaction Type</label></th>
+							<th><label>Amount</label></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for transaction in transactions %}<tr class="transaction">
+							<td>{{transaction.date}}</td>
+							<td>{{transaction.description}}</td>
+							<td>{{transaction.business}}</td>
+							<td>{{transaction.category}}</td>
+							<td>{{transaction.transtype}}</td>
+							<td>{{transaction.amount}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 			<input type="submit">
 		</form>
 	</body>
