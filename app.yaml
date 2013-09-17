@@ -5,10 +5,8 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /stylesheets
-  static_dir: stylesheets
 - url: /.*
-  script: guestbook.application
+  script: owl.app
 
 libraries:
 - name: webapp2
