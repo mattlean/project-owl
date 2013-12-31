@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="transForm">
+    <div class="error">{{error}}</div>
+
+    <form method="post">
+        <label>
+            <div>Date*</div>
+            <input type="text" name="date" value="{{title}}">
+        </label>
+
+        <label>
+            <div>Description</div>
+            <textarea name="description">{{description}}</textarea> </label>
+
+        <label>
+            <div>Business</div>
+            <input type="text" name="business" value="{{business}}">
+        </label>
+
+        <label>
+            <div>Category</div>
+            <input type="text" name="category" value="{{category}}">
+        </label>
+
+        <label>
+            <div>Transaction Type</div>
+            <input type="text" name="transType" value="{{transType}}">
+        </label>
+
+        <label>
+            <div>Amount*</div>
+            <input type="text" name="amount" value="{{amount}}">
+        </label>
+
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}

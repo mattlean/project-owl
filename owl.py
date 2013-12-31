@@ -12,8 +12,8 @@ class Handler(webapp2.RequestHandler):
         self.response.out.write(*a, **kw)
         
     def render_str(self, template, **params):
-        temp = JINJA_ENV.get_template(template)
-        return temp.render(params)
+        t = JINJA_ENV.get_template(template)
+        return t.render(params)
     
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
@@ -26,15 +26,22 @@ class Transaction(db.Model):
     transType = db.StringProperty()
     amount = db.FloatProperty(required = True) #need to cover case where user doesn't input a valid float
     created = db.DateTimeProperty(auto_now_add = True)
+    
+    def render(self):
+        self._render_text = self.content.replace('\n', "<br>")
+        #return render_str("post.html", p = self)
+        t = JINJA_ENV.get_template("post.html")
+        t.render(trans = self)
 
-class MainPage(Handler):
-    def render_front(self, date="", description="", business="", category="", transType="", amount="", error=""):
-        transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
-        self.render("front.html", date=date, description=description, business=business, category=category, transType = transType, amount=amount, error=error, transactions=transactions)
-    
+class FinancePage(Handler):  
     def get(self):
-        self.render_front()
-    
+        transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
+        self.render("finance.html", transactions=transactions)
+
+class AddTrans(Handler):
+    def get(self):
+        self.render("addtrans.html")
+        
     def post(self):
         date = self.request.get("date")
         description = self.request.get("description")
@@ -46,9 +53,10 @@ class MainPage(Handler):
         if date and amount:
             newTransaction = Transaction(date=date, description=description, business=business, category=category, transType=transType, amount=amount)
             newTransaction.put()            
-            self.redirect("/")
+            self.redirect("/finance")
         else:
             error = "You must input at least a date and amount!"
-            self.render_front(date, description, business, category, transType, amount, error)
-
-app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
+            self.render("addtrans.html", date=date, description=description, business=business, category=category, transType=transType, amount=amount, error=error)
+        
+app = webapp2.WSGIApplication([("/finance", FinancePage),
+                               ("/addtrans", AddTrans)], debug=True)
