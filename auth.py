@@ -2,6 +2,7 @@ from google.appengine.ext import db
 from handler import Handler
 from string import letters
 import hashlib
+import logging
 import random
 import re
 
@@ -51,7 +52,6 @@ class RegHandler(Handler):
         return username and USER_RE.match(username)
     
     def valid_password(self, password):
-        logging.debug("YES")
         PASS_RE = re.compile(r"^.{3,20}$")
         return password and PASS_RE.match(password)
     
@@ -74,9 +74,10 @@ class Register(RegHandler):
         if not self.valid_username(self.username):
             params["error_username"] = "Invalid username!"
             have_error = True
-            
+        
         if not self.valid_password(self.password):
             params["error_password"] = "Invalid password!"
+            have_error = True
         elif self.password != self.verify:
             params["error_verify"] = "Your passwords didn't match!"
             have_error = True
