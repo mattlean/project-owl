@@ -1,55 +1,5 @@
-from google.appengine.ext import db
-from handler import Handler
-from string import letters
-import hashlib
-import hmac
-import random
+from handler import Handler, User
 import re
-
-secret = "itsasecrettoeveryone"
-
-class User(db.Model):
-    name = db.StringProperty(required = True)
-    pw_hash = db.StringProperty(required = True)
-    email = db.StringProperty()
-    
-    @classmethod
-    def make_salt(cls, length = 5):
-        return ''.join(random.choice(letters) for x in xrange(length))
-    
-    @classmethod
-    def make_pw_hash(cls, name, pw, salt = None):
-        if not salt:
-            salt = cls.make_salt()
-        h = hashlib.sha256(name + pw + salt).hexdigest()
-        return "%s,%s" % (salt, h)
-    
-    @classmethod
-    def valid_pw(cls, name, password, h):
-        salt = h.split(',')[0]
-        return h == cls.make_pw_hash(name, password, salt)
-    
-    @classmethod
-    def by_id(cls, userid):
-        return cls.get_by_id(userid)
-    
-    @classmethod
-    def by_name(cls, name):
-        user = cls.all().filter("name =", name).get()
-        return user
-
-    @classmethod
-    def create_user(cls, name, pw, email = None):
-        pw_hash = cls.make_pw_hash(name, pw)
-        return User(name = name,
-                    pw_hash = pw_hash,
-                    email = email)
-        
-    @classmethod
-    def check_login(cls, name, pw):
-        user = cls.by_name(name)
-        if user and cls.valid_pw(name, pw, user.pw_hash):
-            return user
 
 class AuthHandler(Handler):
     def valid_username(self, username):
@@ -63,9 +13,6 @@ class AuthHandler(Handler):
     def valid_email(self, email):
         EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
         return not email or EMAIL_RE.match(email)
-    
-    def make_secure_val(self, val):
-        return "%s|%s" % (val, hmac.new(secret, val).hexdigest())
     
     def set_secure_cookie(self, name, val):
         cookie_val = self.make_secure_val(val)

@@ -12,9 +12,12 @@
 		    <a href="finance">View transactions</a>
 		    <a href="addtrans">Add transaction</a>
 		    <span>|</span>
+		    {% if user %}
+		      <a href="/logout">Logout of {{user.name}}</a>
+		    {% else %}
 		    <a href="/register">Register</a>
 		    <a href="/login">Login</a>
-		    <a href="/logout">Logout</a>
+		    {% endif %}
 		</div>
 		<div id="content">
     		{% block content %}
