@@ -3,11 +3,17 @@
 <html>
 	<head>
 		<title>Otis Post</title>
+		<link type="text/css" rel="stylesheet" href="/static/main.css">
 	</head>
 	
 	<body>
 		<h1><a href="/">Otis Post</a></h1>
-		{% block content %}
-		{% endblock %}
+		<div id="navigation">
+		    <a href="/register">Register</a>
+		</div>
+		<div id="content">
+    		{% block content %}
+    		{% endblock %}
+		</div>
 	</body>
 </html>
