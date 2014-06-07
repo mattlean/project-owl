@@ -2,7 +2,7 @@ from google.appengine.ext import db
 from handler import Handler
 from string import letters
 import hashlib
-import logging
+import hmac
 import random
 import re
 
@@ -25,6 +25,11 @@ class User(db.Model):
         return "%s,%s" % (salt, h)
     
     @classmethod
+    def valid_pw(cls, name, password, h):
+        salt = h.split(',')[0]
+        return h == cls.make_pw_hash(name, password, salt)
+    
+    @classmethod
     def by_id(cls, userid):
         return cls.get_by_id(userid)
     
@@ -34,19 +39,19 @@ class User(db.Model):
         return user
 
     @classmethod
-    def register(cls, name, pw, email = None):
+    def create_user(cls, name, pw, email = None):
         pw_hash = cls.make_pw_hash(name, pw)
         return User(name = name,
                     pw_hash = pw_hash,
                     email = email)
         
-    """@classmethod
-    def login(cls, name, pw):
-        u = cls.by_name(name) #what is u?
-        if u and valid_pw(name, pw, u.pw_hash):
-            return u"""
+    @classmethod
+    def check_login(cls, name, pw):
+        user = cls.by_name(name)
+        if user and cls.valid_pw(name, pw, user.pw_hash):
+            return user
 
-class RegHandler(Handler):
+class AuthHandler(Handler):
     def valid_username(self, username):
         USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
         return username and USER_RE.match(username)
@@ -58,8 +63,21 @@ class RegHandler(Handler):
     def valid_email(self, email):
         EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
         return not email or EMAIL_RE.match(email)
+    
+    def make_secure_val(self, val):
+        return "%s|%s" % (val, hmac.new(secret, val).hexdigest())
+    
+    def set_secure_cookie(self, name, val):
+        cookie_val = self.make_secure_val(val)
+        self.response.headers.add_header("Set-Cookie", "%s=%s; Path=/" % (name, cookie_val))
 
-class Register(RegHandler):
+    def login(self, user):
+        self.set_secure_cookie("user_id", str(user.key().id()))
+
+    def logout(self):
+        self.response.headers.add_header("Set-Cookie", "user_id=; Path=/")
+
+class Register(AuthHandler):
     def get(self):
         self.render("register.html")
         
@@ -94,7 +112,28 @@ class Register(RegHandler):
                 msg = "That username already exists!"
                 self.render("register.html", error_username = msg)
             else:
-                u = User.register(self.username, self.password, self.email)
+                u = User.create_user(self.username, self.password, self.email)
                 u.put()
-                #self.login(u)
+                self.login(u)
                 self.redirect('/')
+
+class Login(AuthHandler):
+    def get(self):
+        self.render("login.html")
+        
+    def post(self):
+        username = self.request.get("username")
+        password = self.request.get("password")
+        
+        user = User.check_login(username, password)
+        if user:
+            self.login(user)
+            self.redirect('/')
+        else:
+            msg = "Invalid login!"
+            self.render("login.html", username = username, error = msg)
+
+class Logout(AuthHandler):
+    def get(self):
+        self.logout()
+        self.redirect('/')

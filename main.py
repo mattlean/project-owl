@@ -44,6 +44,8 @@ class AddTrans(Handler):
 app = webapp2.WSGIApplication([
                                ("/", Front),
                                ("/register", auth.Register),
+                               ("/login", auth.Login),
+                               ("/logout", auth.Logout),
                                ("/finance", FinancePage),
                                ("/addtrans", AddTrans)
 ], debug=True)
