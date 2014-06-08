@@ -19,6 +19,7 @@ class Transaction(db.Model):
 class FinancePage(Handler):  
     def get(self):
         transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
+        transactions = list(transactions)
         self.render("finance.html", transactions=transactions)
 
 class AddTrans(Handler):
@@ -42,10 +43,10 @@ class AddTrans(Handler):
             self.render("addtrans.html", date=date, description=description, business=business, category=category, transType=transType, amount=amount, error=error)
 
 app = webapp2.WSGIApplication([
-                               ("/", Front),
-                               ("/register", auth.Register),
-                               ("/login", auth.Login),
-                               ("/logout", auth.Logout),
-                               ("/finance", FinancePage),
-                               ("/addtrans", AddTrans)
+                               ("/?", Front),
+                               ("/register/?", auth.Register),
+                               ("/login/?", auth.Login),
+                               ("/logout/?", auth.Logout),
+                               ("/finance/?", FinancePage),
+                               ("/finance/addtrans/?", AddTrans)
 ], debug=True)
