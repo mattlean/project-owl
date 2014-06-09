@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 from handler import Handler
 import auth
+import json
 import logging
 import webapp2
 
@@ -16,12 +17,29 @@ class Transaction(db.Model):
     transType = db.StringProperty()
     amount = db.FloatProperty(required = True) #need to cover case where user doesn't input a valid float
     created = db.DateTimeProperty(auto_now_add = True)
+    
+    def as_dict(self):
+        dict = {"date": self.date,
+             "description": self.description,
+             "business": self.business,
+             "category": self.category,
+             "transType": self.transType,
+             "amount": self.amount}
+        return dict
 
-class FinancePage(Handler):  
+class FinancePage(Handler):
+    def render_json(self, dict):
+        json_txt = json.dumps(dict)
+        self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
+        self.write(json_txt)
+    
     def get(self):
         transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
         transactions = list(transactions)
-        self.render("finance.html", transactions=transactions)
+        if self.format == "html":
+            self.render("finance.html", transactions=transactions)
+        else:
+            return self.render_json([transaction.as_dict() for transaction in transactions])
 
 class AddTrans(Handler):
     def get(self):
@@ -74,7 +92,7 @@ app = webapp2.WSGIApplication([
                                ("/register/?", auth.Register),
                                ("/login/?", auth.Login),
                                ("/logout/?", auth.Logout),
-                               ("/finance/?", FinancePage),
+                               ("/finance/?(?:\.json)?", FinancePage),
                                ("/finance/addtrans/?", AddTrans),
                                ("/finance/android/submit", AndroidFinanceHandler)
 ], debug=True)
