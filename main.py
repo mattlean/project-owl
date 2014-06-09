@@ -19,17 +19,17 @@ class Transaction(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
     
     def as_dict(self):
-        dict = {"date": self.date,
+        datadict = {"date": self.date,
              "description": self.description,
              "business": self.business,
              "category": self.category,
              "transType": self.transType,
              "amount": self.amount}
-        return dict
+        return datadict
 
 class FinancePage(Handler):
-    def render_json(self, dict):
-        json_txt = json.dumps(dict)
+    def render_json(self, datadict):
+        json_txt = json.dumps(datadict)
         self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
         self.write(json_txt)
     
