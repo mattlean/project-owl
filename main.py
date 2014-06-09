@@ -29,7 +29,8 @@ class Transaction(db.Model):
 
 class FinancePage(Handler):
     def render_json(self, datadict):
-        json_txt = json.dumps(datadict)
+        json_dump = json.dumps(datadict)
+        json_txt = '{"items": ' + json_dump + '}'
         self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
         self.write(json_txt)
     
