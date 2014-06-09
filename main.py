@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 from handler import Handler
 import auth
+import logging
 import webapp2
 
 class Front(Handler):
@@ -42,11 +43,38 @@ class AddTrans(Handler):
             error = "You must input at least a date and amount!"
             self.render("addtrans.html", date=date, description=description, business=business, category=category, transType=transType, amount=amount, error=error)
 
+class AndroidFinanceHandler(webapp2.RequestHandler):
+    def get(self):
+        date = self.request.get("date")
+        description = self.request.get("description")
+        business = self.request.get("business")
+        category = self.request.get("category")
+        transType = self.request.get("transType")
+        amount = self.request.get("amount")
+        
+        if (date == "") or (amount == ""):
+            logging.error("Android submission: Date or amount missing!")
+        else:
+            isNotFloat = False
+
+            try:
+                float(amount)
+            except ValueError:
+                logging.error("Android submission: Amount is not a valid float!")
+                isNotFloat = True
+                
+            if isNotFloat == False:
+                amount = float(amount)
+                newTransaction = Transaction(date=date, description=description, business=business, category=category, transType=transType, amount=amount)
+                newTransaction.put()
+                logging.debug("Android submission: Submission succesful!")
+
 app = webapp2.WSGIApplication([
                                ("/?", Front),
                                ("/register/?", auth.Register),
                                ("/login/?", auth.Login),
                                ("/logout/?", auth.Logout),
                                ("/finance/?", FinancePage),
-                               ("/finance/addtrans/?", AddTrans)
+                               ("/finance/addtrans/?", AddTrans),
+                               ("/finance/android/submit", AndroidFinanceHandler)
 ], debug=True)
