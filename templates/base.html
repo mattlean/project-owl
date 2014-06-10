@@ -9,11 +9,10 @@
 	<body>
 		<h1><a href="/">Otis Post</a></h1>
 		<div id="navigation">
-		    <a href="/finance">View transactions</a>
-		    <a href="/finance/addtrans">Add transaction</a>
-		    <span>|</span>
 		    {% if user %}
-		      <a href="/logout">Logout of {{user.name}}</a>
+    		<a href="/finance">View transactions</a>
+            <a href="/finance/addtrans">Add transaction</a>
+		    <a href="/logout">Logout of {{user.name}}</a>
 		    {% else %}
 		    <a href="/register">Register</a>
 		    <a href="/login">Login</a>

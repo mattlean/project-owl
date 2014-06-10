@@ -35,16 +35,22 @@ class FinancePage(Handler):
         self.write(json_txt)
     
     def get(self):
-        transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
-        transactions = list(transactions)
-        if self.format == "html":
-            self.render("finance.html", transactions=transactions)
+        if self.user:
+            transactions = db.GqlQuery("SELECT * FROM Transaction ORDER BY created DESC")
+            transactions = list(transactions)
+            if self.format == "html":
+                self.render("finance.html", transactions=transactions)
+            else:
+                return self.render_json([transaction.as_dict() for transaction in transactions])
         else:
-            return self.render_json([transaction.as_dict() for transaction in transactions])
+            self.redirect("/login")
 
 class AddTrans(Handler):
     def get(self):
-        self.render("addtrans.html")
+        if self.user:
+            self.render("addtrans.html")
+        else:
+            self.redirect("/login")
         
     def post(self):
         date = self.request.get("date")

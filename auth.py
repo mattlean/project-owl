@@ -54,14 +54,14 @@ class Register(AuthHandler):
         if have_error:
             self.render("register.html", **params)
         else:
-            u = User.by_name(self.username)
-            if u:
+            uset = User.by_name(self.username)
+            if uset:
                 msg = "That username already exists!"
                 self.render("register.html", error_username = msg)
             else:
-                u = User.create_user(self.username, self.password, self.email)
-                u.put()
-                self.login(u)
+                user = User.create_user(self.username, self.password, self.email)
+                user.put()
+                self.login(user)
                 self.redirect('/')
 
 class Login(AuthHandler):
