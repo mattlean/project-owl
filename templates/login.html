@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-    <label>
-        <div>Username</div>
-        <input type="text" name="username" value="{{username}}">
-    </label>
-    <label>
-        <div>Password</div>
-        <input type="password" name="password" value="">
-    </label>
-    <div class="error">{{error}}</div>
-    <input type="submit">
-</form>
+<div class="form-size">
+    <form method="post" role="form">
+        <h2>Login</h2>
+        <input type="text" name="username" value="{{username}}" class="form-control" placeholder="Username" required autofocus>
+        <input type="password" name="password" value="" class="form-control" placeholder="Password" required>
+        <div class="error">{{error}}</div>
+        <input class="btn btn-lg btn-primary btn-block btn-spacing" type="submit">
+    </form>
+</div>
 {% endblock %}

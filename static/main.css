@@ -1,3 +1,16 @@
+#content{
+	margin-top: 80px;
+}
+
+.form-size{
+	margin: 0 auto;
+	width: 310px;
+}
+
+.btn-spacing{
+	margin-top: 10px;
+}
+
 .error{
 	color: red;
 }
