@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-from handler import Handler
+from handler import Handler, User
 import auth
 import json
 import logging
@@ -93,6 +93,17 @@ class AndroidFinanceHandler(webapp2.RequestHandler):
                 newTransaction = Transaction(date=date, description=description, business=business, category=category, transType=transType, amount=amount)
                 newTransaction.put()
                 logging.debug("Android submission: Submission succesful!")
+                
+class AndroidLoginHandler(Handler):
+    def get(self):
+        username = self.request.get("username")
+        password = self.request.get("password")
+        
+        user = User.check_login(username, password)
+        if user:
+            self.error(200)
+        else:
+            self.error(401)
 
 app = webapp2.WSGIApplication([
                                ("/?", Front),
@@ -101,5 +112,6 @@ app = webapp2.WSGIApplication([
                                ("/logout/?", auth.Logout),
                                ("/finance/?(?:\.json)?", FinancePage),
                                ("/finance/addtrans/?", AddTrans),
+                               ("/login/android/submit", AndroidLoginHandler),
                                ("/finance/android/submit", AndroidFinanceHandler)
 ], debug=True)
