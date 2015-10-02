@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h2>New Transaction</h2>
+	<form action="/transaction" method="post">
+		<label>
+			Cost
+			<input type="text" name="cost">
+		</label>
+		<label>
+			Category
+			<input type="text" name="category">
+		</label>
+		<label>
+			Business
+			<input type="text" name="business">
+		</label>
+		<label>
+			Payment
+			<input type="text" name="payment">
+		</label>
+		<label>
+			Comment
+			<textarea name="comment"></textarea>
+		</label>
+		<input type="submit">
+	</form>
+{% endblock %}
