@@ -1,0 +1,14 @@
+{
+  "name": "project-owl",
+  "version": "0.0.0",
+  "homepage": "https://github.com/IsaacLean/project-owl",
+  "authors": [
+    "Matthew Isaac Lean <matt@mattlean.com>"
+  ],
+  "description": "A personal scheduling and finance application.",
+  "main": "src/main.py",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

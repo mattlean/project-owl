@@ -2,27 +2,37 @@
 
 {% block content %}
 	<h2>New Transaction</h2>
-	<form action="/transaction" method="post">
-		<label>
-			Cost
-			<input type="text" name="cost">
-		</label>
-		<label>
-			Category
-			<input type="text" name="category">
-		</label>
-		<label>
-			Business
-			<input type="text" name="business">
-		</label>
-		<label>
-			Payment
-			<input type="text" name="payment">
-		</label>
-		<label>
-			Comment
-			<textarea name="comment"></textarea>
-		</label>
-		<input type="submit">
+	<form action="/transaction" form-group method="post">
+		<div class="form-group">
+			<label>
+				Cost
+				<input type="text" name="cost" class="form-control">
+			</label>
+		</div>
+		<div class="form-group">
+			<label>
+				Category
+				<input type="text" name="category" class="form-control">
+			</label>
+		</div>
+		<div class="form-group">
+			<label>
+				Business
+				<input type="text" name="business" class="form-control">
+			</label>
+		</div>
+		<div class="form-group">
+			<label>
+				Payment
+				<input type="text" name="payment" class="form-control">
+			</label>
+		</div>
+		<div class="form-group">
+			<label>
+				Comment
+				<textarea name="comment" class="form-control"></textarea>
+			</label>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 {% endblock %}
