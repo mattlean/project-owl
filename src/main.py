@@ -7,5 +7,6 @@ from pkg.controllers.debug import Debug
 
 app = webapp2.WSGIApplication([
 	('/transaction', TransactionCtrl),
+	('/transaction/([0-9]+)', TransactionCtrl),
 	('/debug', Debug)
 ], debug=True)

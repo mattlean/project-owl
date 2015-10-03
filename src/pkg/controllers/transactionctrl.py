@@ -1,11 +1,31 @@
+import json
 from datetime import datetime
+from google.appengine.ext import db
 
 from handler import Handler
 from ..models.transactionmodel import Transaction
 
 class TransactionCtrl(Handler):
-	def get(self):
-		self.response.write('Hello world!!')
+	def get(self, transId=''):
+		try:
+			key = db.Key.from_path('Transaction', int(transId))
+			trans = db.get(key)
+
+			if not trans:
+				raise ValueError('Transaction does not exist')
+
+			transDict = {
+							'cost': trans.cost,
+							'date': trans.date.strftime('%Y-%m-%d'),
+							'category': trans.category,
+							'business': trans.business,
+							'payment': trans.payment,
+							'comment': trans.comment
+						}
+
+			self.write(json.dumps(transDict))
+		except:
+			self.write('')
 
 	def post(self):
 		cost = self.request.get('cost')
@@ -18,13 +38,13 @@ class TransactionCtrl(Handler):
 		try:
 			cost = float(cost)
 		except:
-			self.write('cost is not float')
+			self.write('')
 			return
 
 		try:
 			date = datetime.strptime(date, '%Y-%m-%d').date()
 		except:
-			self.write('date is in improper format: ' + date)
+			self.write('')
 			return
 
 		newTrans = Transaction(cost=cost, date=date, category=category, business=business, payment=payment, comment=comment)
