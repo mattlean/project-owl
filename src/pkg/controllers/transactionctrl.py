@@ -7,25 +7,35 @@ from ..models.transactionmodel import Transaction
 
 class TransactionCtrl(Handler):
 	def get(self, transId=''):
-		try:
-			key = db.Key.from_path('Transaction', int(transId))
-			trans = db.get(key)
+		if transId == '':
+			transDict = {'ids': []}
 
-			if not trans:
-				raise ValueError('Transaction does not exist')
-
-			transDict = {
-							'cost': trans.cost,
-							'date': trans.date.strftime('%Y-%m-%d'),
-							'category': trans.category,
-							'business': trans.business,
-							'payment': trans.payment,
-							'comment': trans.comment
-						}
-
+			posts = db.GqlQuery('SELECT * FROM Transaction ORDER BY date desc')
+			for post in posts:
+				transDict['ids'].append(post.key().id())
+			
 			self.write(json.dumps(transDict))
-		except:
-			self.write('')
+		else:
+			try:
+				key = db.Key.from_path('Transaction', int(transId))
+				trans = db.get(key)
+
+				if not trans:
+					raise ValueError('Transaction does not exist')
+
+				transDict = {
+								'id': transId,
+								'cost': trans.cost,
+								'date': trans.date.strftime('%Y-%m-%d'),
+								'category': trans.category,
+								'business': trans.business,
+								'payment': trans.payment,
+								'comment': trans.comment
+							}
+
+				self.write(json.dumps(transDict))
+			except:
+				self.write('')
 
 	def post(self):
 		cost = self.request.get('cost')
@@ -49,3 +59,4 @@ class TransactionCtrl(Handler):
 
 		newTrans = Transaction(cost=cost, date=date, category=category, business=business, payment=payment, comment=comment)
 		newTrans.put()
+		self.redirect('/transaction/' + str(newTrans.key().id()))
