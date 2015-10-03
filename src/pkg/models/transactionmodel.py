@@ -8,4 +8,4 @@ class Transaction(db.Model):
 	payment = db.StringProperty()
 	comment = db.TextProperty()
 	created = db.DateTimeProperty(auto_now_add = True)
-	modified = db.DateProperty(auto_now = True)
+	modified = db.DateTimeProperty(auto_now = True)

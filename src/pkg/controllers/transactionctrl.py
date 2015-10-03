@@ -1,5 +1,4 @@
-import datetime
-import logging
+from datetime import datetime
 
 from handler import Handler
 from ..models.transactionmodel import Transaction
@@ -11,12 +10,22 @@ class TransactionCtrl(Handler):
 	def post(self):
 		cost = self.request.get('cost')
 		date = self.request.get('date')
+		category = self.request.get('category')
+		business = self.request.get('business')
+		payment = self.request.get('payment')
+		comment = self.request.get('comment')
 
 		try:
 			cost = float(cost)
 		except:
 			self.write('cost is not float')
+			return
 
-		self.write(str(cost) + ' ' + str(date))
-		#self.write(datetime.datetime.strptime('12-01-30', '%y-%d-%m').date())
-		#newTrans = Transaction(cost=cost, date=date)
+		try:
+			date = datetime.strptime(date, '%Y-%m-%d').date()
+		except:
+			self.write('date is in improper format: ' + date)
+			return
+
+		newTrans = Transaction(cost=cost, date=date, category=category, business=business, payment=payment, comment=comment)
+		newTrans.put()
