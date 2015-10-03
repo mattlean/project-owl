@@ -10,7 +10,7 @@ var TransForm = React.createClass({
 	render: function() {
 		return (
 			<form action="/transaction" method="post">
-				<Link href="/test" className="btn btn-success">Go to "test"</Link>
+				<Link href="/history" className="btn btn-success">Go to "history"</Link>
 				<h2>New Transaction</h2>
 				<div className="form-group">
 					<label>

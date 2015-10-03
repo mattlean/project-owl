@@ -5,14 +5,14 @@ var Location = Router.Location;
 
 var AppActions = require('../actions/AppActions.js');
 var TransForm = require('./TransForm.react.js');
-var Test = require('./Test.react.js');
+var History = require('./History.react.js');
 
 var App = React.createClass({
 	render: function() {
 		return (
 			<Locations>
 				<Location path="/" handler={TransForm} />
-				<Location path="/test" handler={Test} />
+				<Location path="/history" handler={History} />
 			</Locations>
 		)
 	}
