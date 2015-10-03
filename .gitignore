@@ -1,5 +1,5 @@
 node_modules/
 src/server/static/bower_components/
-src/static/main.js
+src/server/static/main.js
 src/server/pkg/views/app.html
 *.pyc
