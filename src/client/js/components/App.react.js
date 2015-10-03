@@ -1,12 +1,14 @@
 var React = require('react');
 var AppActions = require('../actions/AppActions.js');
 
+var TransForm = require('./TransForm.react.js');
+
 var App = React.createClass({
 	handleClick: function() {
 		AppActions.addTrans('this is the trans');
 	},
 	render: function() {
-		return <p onClick={this.handleClick}>Hello world!</p>
+		return <TransForm />
 	}
 });
 
