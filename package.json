@@ -1,0 +1,22 @@
+{
+  "name": "project-owl",
+  "version": "0.0.0",
+  "description": "A personal scheduling and finance application.",
+  "main": "src/main.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IsaacLean/project-owl.git"
+  },
+  "author": "Matthew Isaac Lean <matt@mattlean.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IsaacLean/project-owl/issues"
+  },
+  "homepage": "https://github.com/IsaacLean/project-owl#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}
