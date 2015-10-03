@@ -6,7 +6,7 @@
     "Matthew Isaac Lean <matt@mattlean.com>"
   ],
   "description": "A personal scheduling and finance application.",
-  "main": "src/main.py",
+  "main": "src/server/main.py",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "~3.3.5"

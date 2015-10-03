@@ -1,3 +1,5 @@
 node_modules/
-src/static/bower_components/
+src/server/static/bower_components/
+src/static/main.js
+src/server/pkg/views/app.html
 *.pyc
