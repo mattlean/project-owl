@@ -1,4 +1,6 @@
 var React = require('react');
+var Link = require('react-router-component').Link;
+
 var AppActions = require('../actions/AppActions.js');
 
 var TransForm = React.createClass({
@@ -8,6 +10,7 @@ var TransForm = React.createClass({
 	render: function() {
 		return (
 			<form action="/transaction" method="post">
+				<Link href="/test" className="btn btn-success">Go to "test"</Link>
 				<h2>New Transaction</h2>
 				<div className="form-group">
 					<label>

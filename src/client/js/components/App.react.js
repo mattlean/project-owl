@@ -1,14 +1,20 @@
 var React = require('react');
-var AppActions = require('../actions/AppActions.js');
+var Router = require('react-router-component');
+var Locations = Router.Locations;
+var Location = Router.Location;
 
+var AppActions = require('../actions/AppActions.js');
 var TransForm = require('./TransForm.react.js');
+var Test = require('./Test.react.js');
 
 var App = React.createClass({
-	handleClick: function() {
-		AppActions.addTrans('this is the trans');
-	},
 	render: function() {
-		return <TransForm />
+		return (
+			<Locations>
+				<Location path="/" handler={TransForm} />
+				<Location path="/test" handler={Test} />
+			</Locations>
+		)
 	}
 });
 

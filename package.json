@@ -16,13 +16,13 @@
     "url": "https://github.com/IsaacLean/project-owl/issues"
   },
   "homepage": "https://github.com/IsaacLean/project-owl#readme",
-  "devDependencies": {
-    "gulp": "^3.9.0"
-  },
   "dependencies": {
     "browserify": "^11.2.0",
     "flux": "^2.1.1",
+    "gulp": "^3.9.0",
     "react": "^0.13.3",
+    "react-async": "^2.1.0",
+    "react-router-component": "^0.26.1",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0"
   }
